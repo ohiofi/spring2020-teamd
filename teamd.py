@@ -18,3 +18,17 @@ def doesRoomExist(roomNumber):
     except:
         print("You can't go there. You hit a wall, -1 intelligence")
         return False
+
+def move(userInput, location):
+    if userInput == "n" and doesRoomExist(location) == True:
+        location = location -1
+    elif userInput == "s" and doesRoomExist(location) == True:
+        location = location + 1
+    elif userInput == "e" and doesRoomExist(location) == True:
+        location = location + 100
+    elif userInput == "w" and doesRoomExist(location) == True:
+        location = location - 100
+    else:
+        location = location
+    return location
+
