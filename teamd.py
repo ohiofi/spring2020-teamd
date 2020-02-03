@@ -21,15 +21,29 @@ def doesRoomExist(roomNumber):
         return False
 
 def move(userInput, location):
-    if userInput == "n" and doesRoomExist(location) == True:
+    userInput = userInput.lower()
+    if userInput == "n":
         location = location -1
-    elif userInput == "s" and doesRoomExist(location) == True:
+        if doesRoomExist(location) == True:
+            return location
+        else:
+            return location + 1
+    elif userInput == "s":
         location = location + 1
-    elif userInput == "e" and doesRoomExist(location) == True:
+        if doesRoomExist(location) == True:
+            return location 
+        else:
+            return location - 1
+    elif userInput == "e":
         location = location + 100
-    elif userInput == "w" and doesRoomExist(location) == True:
+        if doesRoomExist(location) == True:
+            return location
+        else:
+            return location - 100
+    elif userInput == "w":
         location = location - 100
-    else:
-        location = location
-    return location
+        if doesRoomExist(location) == True:
+            return location
+        else:
+            return location + 100
 
