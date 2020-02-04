@@ -25,6 +25,20 @@ itemArray[503] = "tray"
 itemArray[506] = "key"
 itemArray[606] = "soda"
 
+# mess hall
+roomArray[402] = "To the north and west, there are walls. To the east, you see a tall figure lurking in the shadows. To the south, there is a table."
+roomArray[403] = "You are in the mess hall. You stand before a table. To the west is the entrance to the hall. There is another table to the east."
+roomArray[404] = "There are walls to the south and west. To the north, there is a table. To the east, you see a red light blinking in the darkness."
+roomArray[504] = "You are in the mess hall. To the south there is an entrance to the guard's office, and to the east, a wall. A security camera with a blinking red light is nestled in the corner. To the north is a table."
+# if (PLAYER HAS ITEM):
+    # roomArray[502] = "The guard snores where he stands. South of you is a table. To the north is the exit. To the east is a wall."
+# else:
+    # roomArray[502] = "You've run into the guard. It's on sight. You're dead."
+roomArray[502] = True
+roomArray[503] = "You stand before a table. To the south, there is a red, blinking light in the darkness. To the west, there is another table. To the north, there is a tall figure lurking in the shadows. To the east, there is a wall."
+# exit
+roomArray[501] = "You have made it to the exit. The Eagle has left the nest."
+
 def doesRoomExist(roomNumber):
     try: 
         if roomArray[roomNumber] == False:
