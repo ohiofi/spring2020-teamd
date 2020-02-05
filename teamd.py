@@ -69,6 +69,9 @@ def move(userInput, location):
             return location
         else:
             return location + 100
+    else:
+        print("not valid")
+        return location
 
 
 def main():
@@ -81,12 +84,19 @@ def main():
         if itemArray[location] == False:
             print("Please type: n, s, e, w, or quit")
             userInput = input()
-            location = move(userInput, location)
+            userInput = userInput.lower()
+            if userInput == "quit":
+                break
+            else:
+                location = move(userInput, location)
         else:
             print("There is an " + itemArray[location] + " here.")
             print("Please type: n, s, e, w, pickup or quit")
             userInput = input()
-            if userInput == "pickup":
+            userInput = userInput.lower()
+            if userInput == "quit":
+                break
+            elif userInput == "pickup":
                 inventoryArray.append(itemArray[location])
                 itemArray[location] = False
             else:
