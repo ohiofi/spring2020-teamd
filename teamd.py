@@ -157,12 +157,15 @@ def move(userInput, location):
         return location
 
 def guessthepassword():
+    passComplete = False
     while True:
         print("You sit in front of the guard's computer. \nThere is a sticky note stuck to the top of the monitor. It reads: \nMain character in the bible \nIgneous _____ \n \nPLEASE ENTER A PASSWORD")
         userinput = str.lower(input())
         if userinput == "jesusrocks":
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nYou're in!")
             print("The open page blares Never Gonna Give You Up by Rick Astley. A cat is playing piano on-screen. \nYou resist the urge to gag. What is this, 2008?")
+            global passComplete = True
+            return passComplete
             break
         else:
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nWrong password. Try again.")
