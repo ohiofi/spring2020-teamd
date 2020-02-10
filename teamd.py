@@ -1,3 +1,199 @@
+from turtle import *
+import math
+
+
+class Map(Turtle):
+    def __init__(self):
+        Turtle.__init__(self)
+        self.speed(0)
+        self.penup()
+        self.screen = Screen()
+        self.size = 900  # map window size
+        self.mapBorder = 20
+        self.roomSize = 20
+        self.roomBorder = 2
+        self.startingLocation = None
+        self.columnHeight = 100
+        self.screen.setup(self.size, self.size)
+        self.screen.tracer(0)
+        self.screen.bgcolor("black")
+        self.roomColor = "white"
+        self.startTextColor = "green"
+        self.bigStarColor = "blue"
+        self.littleStarColor = "orange"
+        self.screen.register_shape(
+            "bigStar",
+            (
+            (-10, -6.5),
+            (10, 0),
+            (-10, 6.5),
+            (2.5, -10),
+            (2.5, 10),
+            (-10, -6.5)
+            ),
+        )
+        self.littleStarSize = 4
+        self.screen.register_shape(
+            "littleStar",
+            (
+                (-10 / self.littleStarSize, -6.5 / self.littleStarSize),
+                (10 / self.littleStarSize, 0),
+                (-10 / self.littleStarSize, 6.5 / self.littleStarSize),
+                (2.5 / self.littleStarSize, -10 / self.littleStarSize),
+                (2.5 / self.littleStarSize, 10 / self.littleStarSize),
+                (-10 / self.littleStarSize, -6.5 / self.littleStarSize),
+            ),
+        )
+        # reveal instance variables
+        self.revealDistance = 2
+        self.revealWallColor = "gray"
+        self.mappedRooms = []
+        self.mappedItems = []
+        for i in range(1999):
+            self.mappedRooms.append(None)
+            self.mappedItems.append(False)
+
+    def setBackgroundColor(self, color="black"):
+        self.screen.bgcolor(color)
+
+    def setRoomColor(self, color="white"):
+        self.roomColor = color
+
+    def setRevealWallColor(self, color="gray"):
+        self.revealWallColor = color
+
+    def setBigStarColor(self, color="red"):
+        self.bigStarColor = color
+
+    def setLittleStarColor(self, color="gold"):
+        self.littleStarColor = color
+
+    def setTextColor(self, color):
+        self.startTextColor = color
+
+    # if there is no starting location, set it
+    def setStartingLocation(self, myLocation):
+        if self.startingLocation is None:
+            self.startingLocation = myLocation
+
+    # transfer rooms within the reveal distance from the rooms array to the mapped rooms array
+    def mapTheSurroundingArea(self, myLocation, rooms, roomItems):
+        for row in range(
+            myLocation % self.columnHeight - self.revealDistance,
+            myLocation % self.columnHeight + self.revealDistance + 1,
+        ):
+            for col in range(
+                myLocation // self.columnHeight * self.columnHeight
+                - self.revealDistance * self.columnHeight,
+                myLocation // self.columnHeight * self.columnHeight
+                + self.revealDistance * self.columnHeight
+                + self.columnHeight,
+                self.columnHeight,
+            ):
+                try:
+                    self.mappedRooms[row + col] = rooms[row + col]
+                    self.mappedItems[row + col] = roomItems[row + col]
+                except:
+                    pass
+
+    # if there is a room here, stamp a square at the current row and column
+    def drawRoom(self, row, column, roomArray):
+        try:
+            if roomArray[column * self.columnHeight + row]:
+                self.color(self.roomColor)
+                self.shape("square")
+                self.goto(
+                    -self.size / 2
+                    + (self.roomSize / 2)
+                    + column * (self.roomSize + self.roomBorder)
+                    + self.mapBorder,
+                    self.size / 2
+                    - (self.roomSize / 2)
+                    - row * (self.roomSize + self.roomBorder)
+                    - self.mapBorder,
+                )
+                self.stamp()
+        except:
+            pass
+
+    # if there is a revealed wall here, stamp a square at the current row and column
+    def drawRevealedWall(self, row, column, roomArray):
+        try:
+            if roomArray[column * self.columnHeight + row] is False:
+                self.color(self.revealWallColor)
+                self.shape("square")
+                self.goto(
+                    -self.size / 2
+                    + (self.roomSize / 2)
+                    + column * (self.roomSize + self.roomBorder)
+                    + self.mapBorder,
+                    self.size / 2
+                    - (self.roomSize / 2)
+                    - row * (self.roomSize + self.roomBorder)
+                    - self.mapBorder,
+                )
+                self.stamp()
+        except:
+            pass
+
+    # if there is an item here, stamp a little star at the current row and column
+    def drawLittleStar(self, row, column, itemArray):
+        try:
+            if itemArray[column * self.columnHeight + row]:
+                self.color(self.littleStarColor)
+                self.shape("littleStar")
+                # self.goto(-self.size/2+(self.roomSize/2)+column*(self.roomSize+self.roomBorder)+self.mapBorder,self.size/2-(self.roomSize/2)-row*(self.roomSize+self.roomBorder)-self.mapBorder)
+                self.stamp()
+        except:
+            pass
+
+    # if there the startingLocation is here, write Start at the current row and column
+    def drawStart(self, row, column, _startingLocation):
+        if _startingLocation == column * self.columnHeight + row:
+            self.color(self.startTextColor)
+            self.back(self.roomSize / 2)
+            self.write("Start", font=("Arial", 7, "normal"))
+            self.forward(self.roomSize / 2)
+
+    # if the currentlocation is here, stamp a big star at the current row and column
+    def drawBigStar(self, row, column, myLocation):
+        if myLocation == column * self.columnHeight + row:
+            self.color(self.bigStarColor)
+            self.shape("bigStar")
+            self.stamp()
+
+    # use the draw method to draw and redraw the map
+    def draw(self, rooms, roomItems, myLocation):
+        rowWidth = int(math.ceil(len(rooms) / self.columnHeight))
+        self.penup()
+        self.clear()
+        self.setStartingLocation(myLocation)
+        for row in range(self.columnHeight):
+            for column in range(rowWidth):
+                self.drawRoom(row, column, rooms)
+                self.drawLittleStar(row, column, roomItems)
+                self.drawStart(row, column, self.startingLocation)
+                self.drawBigStar(row, column, myLocation)
+        self.screen.update()
+
+    # use the reveal method (instead of draw) to SLOWLY draw and reveal the map
+    def reveal(self, rooms, roomItems, myLocation):
+        self.mapTheSurroundingArea(myLocation, rooms, roomItems)
+        rowWidth = int(math.ceil(len(rooms) / self.columnHeight))
+        self.penup()
+        self.clear()
+        self.setStartingLocation(myLocation)
+        for row in range(self.columnHeight):
+            for column in range(rowWidth):
+                self.drawRoom(row, column, self.mappedRooms)
+                self.drawRevealedWall(row, column, self.mappedRooms)
+                self.drawLittleStar(row, column, self.mappedItems)
+                self.drawStart(row, column, self.startingLocation)
+                self.drawBigStar(row, column, myLocation)
+        self.screen.update()
+
+
+from map import *
 from time import *
 
 roomArray = []
@@ -7,6 +203,8 @@ for i in range(999):
     roomArray.append(False)
 for i in range(999):
     itemArray.append(False)
+
+prison = Map()
 
 
 roomArray[102] = "You are standing in the corner of the dark prison cell. \nTo the east is a bed. To the south is a toilet."
@@ -39,81 +237,6 @@ itemArray[403] = "candy bar"
 itemArray[503] = "tray"
 itemArray[506] = "key"
 itemArray[606] = "soda"
-
-def randomHealth():
-    health = randint(30,50)
-    return health
-
-def randomTrueFalse():
-    chooser = randint(1,2)
-    if chooser == 1:
-        return True
-    else:
-        return False
-
-def diceRoll():
-    roll = randint(1,6)
-    return roll
-
-def hitBoss(weapon):
-    damage = 0
-    weapon = weapon.lower()
-    if "shiv" in inventoryArray or "weight" in inventoryArray or "aligator Tooth" in inventoryArray or "dirty sock" in inventoryArray:
-        if "shiv" in weapon or "weight" in weapon or "aligator tooth" in weapon or "dirty sock" in weapon:
-            damage = damage + 5 + diceRoll()
-        elif "fist" in weapon:
-            damage = damage + diceRoll()
-    else:
-        if "fist" in weapon:
-            damage = damage + diceRoll()
-    print(damage)
-    return damage
-
-def hitPlayer(playerHealth):
-    myList = ["Punchy Punch", "Tazer", "Roundhouse Kick", "Drop Kick", "Haymaker", "Baton Beat", "Shooty Shooty"]
-    attack = choice(myList)
-    print("Gaurd uses" + attack)
-    damage = 0
-    damage = damage + diceRoll()
-    if playerHealth > 25:
-        damage = damage + diceRoll()
-    print(damage)
-    return damage
-
-def whoWins(playerHealth, bossHealth):
-    if bossHealth <= 0:
-        print("Player Wins")
-        return global bossDead
-    else:
-        print("Boss Wins")
-
-def mainBoss():
-  playerHealth = 50
-  bossHealth = randomHealth()
-  while playerHealth > 0 and bossHealth > 0:
-    print("Gaurd " + str(bossHealth) + " health")
-    sleep(1)
-    print("What do you want to use?")
-    if "shiv" in inventoryArray:
-        print("Shiv")
-    if "weight" in inventoryArray:
-        print("Weight")
-    if "aligator tooth" in inventoryArray:
-        print("Aligator Tooth")
-    if "aligator tooth" in inventoryArray:
-        print("Dirty Sock")
-    print("Fist")
-    weapon = input()
-    sleep(1)
-    damage = hitBoss(weapon)
-    bossHealth = bossHealth - damage
-    if bossHealth > 0:
-      damage = hitPlayer(playerHealth)
-      sleep(1)
-      playerHealth = playerHealth - damage
-      print("You have " + str(playerHealth) + " remaining")
-      sleep(1)
-  whoWins(playerHealth, bossHealth)
 
 def doesRoomExist(roomNumber):
     try: 
@@ -208,6 +331,7 @@ print("               ███    ███                                    
     sleep(1)
     while True:
         print(roomArray[location])
+        prison.draw(roomArray, False, location)
         if itemArray[location] == False:
             print("Please type: n, s, e, w, or quit")
             userInput = input()
