@@ -81,11 +81,14 @@ def hitPlayer(playerHealth):
     return damage
 
 def whoWins(playerHealth, bossHealth):
+    global bossDead = False
     if bossHealth <= 0:
         print("Player Wins")
-        return global bossDead
+        global bossDead = True
+        return bossDead
     else:
         print("Boss Wins")
+        return bossDead
 
 def mainBoss():
   playerHealth = 50
