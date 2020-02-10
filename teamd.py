@@ -29,6 +29,10 @@ roomArray[603] = "Down the hall you see sun light and workout equipment. To the 
 roomArray[804] = "You enter the vent, it smells like feet and has mounts of dust in it. To the south the vent continues, to the north is the yard."
 roomArray[805] = "As you get further in the vent the smell and dust build up only get worse. To the south the vent continues, to the north is sun light and more vent."
 roomArray[806] = "You reach the end of the vent covered in the thickest layer of dust posible. To the nourth is dim light and more vent."
+roomArray[701] = "To the north and west, there are fences You look up, and wonder if you can climb it."
+roomArray[801] = "To the north and east, there are fences. There's a hole at the bottom, only just big enough for a cat to fit through."
+roomArray[802] = "You kick the dirt of the yard. From the other side, there's an inmate glaring at you."
+roomArray[702] = "To the west, there is a fence. Beneath your feet, some grass grows."
 itemArray[202] = "aligator tooth"
 itemArray[103] = "wire cutters"
 itemArray[403] = "candy bar"
@@ -77,6 +81,16 @@ def move(userInput, location):
         print("not valid")
         return location
 
+def guessthepassword():
+    while True:
+        print("You sit in front of the guard's computer. \nThere is a sticky note stuck to the top of the monitor. It reads: \nMain character in the bible \nIgneous _____ \n \nPLEASE ENTER A PASSWORD")
+        userinput = str.lower(input())
+        if userinput == "jesusrocks":
+            print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nYou're in!")
+            print("The open page blares Never Gonna Give You Up by Rick Astley. A cat is playing piano on-screen. \nYou resist the urge to gag. What is this, 2008?")
+            break
+        else:
+            print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nWrong password. Try again.")
 
 def main():
     location = 102
