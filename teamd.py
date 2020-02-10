@@ -40,6 +40,81 @@ itemArray[503] = "tray"
 itemArray[506] = "key"
 itemArray[606] = "soda"
 
+def randomHealth():
+    health = randint(30,50)
+    return health
+
+def randomTrueFalse():
+    chooser = randint(1,2)
+    if chooser == 1:
+        return True
+    else:
+        return False
+
+def diceRoll():
+    roll = randint(1,6)
+    return roll
+
+def hitBoss(weapon):
+    damage = 0
+    weapon = weapon.lower()
+    if "shiv" in inventoryArray or "weight" in inventoryArray or "aligator Tooth" in inventoryArray or "dirty sock" in inventoryArray:
+        if "shiv" in weapon or "weight" in weapon or "aligator tooth" in weapon or "dirty sock" in weapon:
+            damage = damage + 5 + diceRoll()
+        elif "fist" in weapon:
+            damage = damage + diceRoll()
+    else:
+        if "fist" in weapon:
+            damage = damage + diceRoll()
+    print(damage)
+    return damage
+
+def hitPlayer(playerHealth):
+    myList = ["Punchy Punch", "Tazer", "Roundhouse Kick", "Drop Kick", "Haymaker", "Baton Beat", "Shooty Shooty"]
+    attack = choice(myList)
+    print("Gaurd uses" + attack)
+    damage = 0
+    damage = damage + diceRoll()
+    if playerHealth > 25:
+        damage = damage + diceRoll()
+    print(damage)
+    return damage
+
+def whoWins(playerHealth, bossHealth):
+    if bossHealth <= 0:
+        print("Player Wins")
+        return global bossDead
+    else:
+        print("Boss Wins")
+
+def mainBoss():
+  playerHealth = 50
+  bossHealth = randomHealth()
+  while playerHealth > 0 and bossHealth > 0:
+    print("Gaurd " + str(bossHealth) + " health")
+    sleep(1)
+    print("What do you want to use?")
+    if "shiv" in inventoryArray:
+        print("Shiv")
+    if "weight" in inventoryArray:
+        print("Weight")
+    if "aligator tooth" in inventoryArray:
+        print("Aligator Tooth")
+    if "aligator tooth" in inventoryArray:
+        print("Dirty Sock")
+    print("Fist")
+    weapon = input()
+    sleep(1)
+    damage = hitBoss(weapon)
+    bossHealth = bossHealth - damage
+    if bossHealth > 0:
+      damage = hitPlayer(playerHealth)
+      sleep(1)
+      playerHealth = playerHealth - damage
+      print("You have " + str(playerHealth) + " remaining")
+      sleep(1)
+  whoWins(playerHealth, bossHealth)
+
 def doesRoomExist(roomNumber):
     try: 
         if roomArray[roomNumber] == False:
