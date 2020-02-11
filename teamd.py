@@ -122,8 +122,22 @@ def mainBoss():
       sleep(1)
   whoWins(playerHealth, bossHealth)
 
+def lockedRoom(location):
+    if location == 504:
+        if roomArray[505] == False and "key" in inventoryArray:
+            print("Do you want to use key? If so type use key")
+            userInput = input()
+            userInput = userInput.lower()
+            if userInput == "use key":
+                print("The nearby room unlocks")
+                roomArray[505] = "You are in the guard office, you definetly should not be in here. To the south is a messy desk and computer, and to the east is calendar and posters of old movies. "
+
+            else:
+                print("The nearby room remains locked")
+
 def doesRoomExist(roomNumber):
-    try: 
+    try:
+        lockedRoom(roomNumber)
         if roomArray[roomNumber] == False:
             print("You can't go there. You hit a wall, -1 intelligence")
             return False
