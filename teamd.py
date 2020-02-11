@@ -199,13 +199,43 @@ from time import *
 roomArray = []
 itemArray = []
 inventoryArray = []
+
+global quizCompleted
+quizCompleted = False
+global bossDead
+bossDead = False
+global passComplete
+passComplete = False
+
+def specialRooms(location):
+
+  if location == 803 and quizCompleted == False:
+        highLowMain()
+    else:
+        roomArray[804] = "hi"
+  if location == 502 and bossDead == False:
+        mainBoss()
+    else:
+        roomArray[501] = "The guard snores where he stands. South of you is a table. To the north is the exit. To the east is a wall."
+  if location == 605 and passComplete == False:
+        guessthepassword()
+
+
+
 for i in range(999):
     roomArray.append(False)
 for i in range(999):
     itemArray.append(False)
 
+
 prison = Map()
 
+
+
+roomArray[703] = "You are standing in a courtyard, This is where activities take place. \n To the west is the hall leading inside, to the east is more yard as well as to the north."
+roomArray[803] = "You reach more of the courtyard, there is an old picnic table here. \n There is a vent to the south large enough to fit in. To the north is some more of the yard, as well as to the east. To the west is the weight area."
+roomArray[903] = "This is the weight lifting area of the yard, it is a mess. \nTo the north is a grassy portion of the yard, to the west is more yard."
+roomArray[902] = "This is the greenest area of the prison with a large chain fence. \nTo the south is the weights, and to the east is more courtyard."
 
 roomArray[102] = "You are standing in the corner of the dark prison cell. \nTo the east is a bed. To the south is a toilet."
 roomArray[103] = "You are now infront of your bed. The matress is made out of cardboard, and the pillow is a stuffed aligator. \nTo the west is another part of your cell. To the south is the cell door."
@@ -231,15 +261,114 @@ roomArray[701] = "To the north and west, there are fences You look up, and wonde
 roomArray[801] = "To the north and east, there are fences. There's a hole at the bottom, only just big enough for a cat to fit through."
 roomArray[802] = "You kick the dirt of the yard. From the other side, there's an inmate glaring at you."
 roomArray[702] = "To the west, there is a fence. Beneath your feet, some grass grows."
-itemArray[202] = "aligator tooth"
-itemArray[103] = "wire cutters"
-itemArray[403] = "candy bar"
-itemArray[503] = "tray"
-itemArray[506] = "key"
-itemArray[606] = "soda"
+itemArray[303] = "Poster"
+itemArray[805] = "Shiv"
+itemArray[801] = "Basket ball"
+itemArray[903] = "Weight"
+itemArray[702] = "Flower"
+itemArray[603] = "Smelly sock"
+itemArray[404] = "Mashed potatos"
+itemArray[506] = "Uniform"
+itemArray[202] = "Aligator tooth"
+itemArray[103] = "Wire cutters"
+itemArray[403] = "Candy bar"
+itemArray[503] = "Tray"
+itemArray[806] = "Key"
+itemArray[606] = "Soda"
+
+
+def randomHealth():
+    health = randint(30,50)
+    return health
+
+def randomTrueFalse():
+    chooser = randint(1,2)
+    if chooser == 1:
+        return True
+    else:
+        return False
+
+def diceRoll():
+    roll = randint(1,6)
+    return roll
+
+def hitBoss(weapon):
+    damage = 0
+    weapon = weapon.lower()
+    if "shiv" in inventoryArray or "weight" in inventoryArray or "aligator Tooth" in inventoryArray or "dirty sock" in inventoryArray:
+        if "shiv" in weapon or "weight" in weapon or "aligator tooth" in weapon or "dirty sock" in weapon:
+            damage = damage + 5 + diceRoll()
+        elif "fist" in weapon:
+            damage = damage + diceRoll()
+    else:
+        if "fist" in weapon:
+            damage = damage + diceRoll()
+    print(damage)
+    return damage
+
+def hitPlayer(playerHealth):
+    myList = ["Punchy Punch", "Tazer", "Roundhouse Kick", "Drop Kick", "Haymaker", "Baton Beat", "Shooty Shooty"]
+    attack = choice(myList)
+    print("Gaurd uses" + attack)
+    damage = 0
+    damage = damage + diceRoll()
+    if playerHealth > 25:
+        damage = damage + diceRoll()
+    print(damage)
+    return damage
+
+def whoWins(playerHealth, bossHealth):
+    if bossHealth <= 0:
+        print("Player Wins")
+        bossDead = True
+    else:
+        print("Boss Wins")
+
+def mainBoss():
+  playerHealth = 50
+  bossHealth = randomHealth()
+  while playerHealth > 0 and bossHealth > 0:
+    print("Gaurd " + str(bossHealth) + " health")
+    sleep(1)
+    print("What do you want to use?")
+    if "shiv" in inventoryArray:
+        print("Shiv")
+    if "weight" in inventoryArray:
+        print("Weight")
+    if "aligator tooth" in inventoryArray:
+        print("Aligator Tooth")
+    if "aligator tooth" in inventoryArray:
+        print("Dirty Sock")
+    print("Fist")
+    weapon = input()
+    sleep(1)
+    damage = hitBoss(weapon)
+    bossHealth = bossHealth - damage
+    if bossHealth > 0:
+      damage = hitPlayer(playerHealth)
+      sleep(1)
+      playerHealth = playerHealth - damage
+      print("You have " + str(playerHealth) + " remaining")
+      sleep(1)
+  whoWins(playerHealth, bossHealth)
+
+def lockedRoom(location):
+    if location == 504:
+        if roomArray[505] == False and "key" in inventoryArray:
+            print("Do you want to use key? If so type use key")
+            userInput = input()
+            userInput = userInput.lower()
+            if userInput == "use key":
+                print("The nearby room unlocks")
+                roomArray[505] = "You are in the guard office, you definetly should not be in here. To the south is a messy desk and computer, and to the east is calendar and posters of old movies. "
+
+            else:
+                print("The nearby room remains locked")
+
 
 def doesRoomExist(roomNumber):
-    try: 
+    try:
+        lockedRoom(roomNumber)
         if roomArray[roomNumber] == False:
             print("You can't go there. You hit a wall, -1 intelligence")
             return False
@@ -280,16 +409,46 @@ def move(userInput, location):
         return location
 
 def guessthepassword():
+    passComplete = False
     while True:
         print("You sit in front of the guard's computer. \nThere is a sticky note stuck to the top of the monitor. It reads: \nMain character in the bible \nIgneous _____ \n \nPLEASE ENTER A PASSWORD")
         userinput = str.lower(input())
         if userinput == "jesusrocks":
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nYou're in!")
             print("The open page blares Never Gonna Give You Up by Rick Astley. A cat is playing piano on-screen. \nYou resist the urge to gag. What is this, 2008?")
+            passComplete = True
             break
         else:
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nWrong password. Try again.")
 
+ def randomSecretWord ():
+    firstDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    secondDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    thirdDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    combinedList = firstDigit + secondDigit + thirdDigit
+    randFirst = choice(combinedList)
+    randSecond = choice(combinedList)
+    randThird = choice(combinedList)
+    randCombo = randFirst + randSecond + randThird
+    return randCombo
+
+def highLowMain():
+    secretNumber = randomSecretWord()
+    secretNumber = str(secretNumber)
+    print("I'm thinking of a secret three number combination. Take a guess and I'll tell you if the secret number is before your number or after your number.")
+    while True:
+        print("Guess a word")
+        userInput = input()
+        userInput = str(userInput)
+        if userInput < secretNumber:
+            print("The secret word is after " + userInput)
+        if userInput > secretNumber:
+            print("The secret word is before " + userInput)
+        if userInput == secretNumber:
+            print("You got it!!!!!")
+            quizComplete = True
+            break           
+            
 def main():
     location = 102
     print("   ▄████████  ▄█        ▄██████▄     ▄████████  ▄█  ████████▄     ▄████████        ▄▄▄▄███▄▄▄▄      ▄████████ ███▄▄▄▄                             ")
