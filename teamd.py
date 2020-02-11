@@ -32,7 +32,10 @@ for i in range(999):
 for i in range(999):
     itemArray.append(False)
 
-
+roomArray[703] = "You are standing in a courtyard, This is where activities take place. \n To the west is the hall leading inside, to the east is more yard as well as to the north."
+roomArray[803] = "You reach more of the courtyard, there is an old picnic table here. \n There is a vent to the south large enough to fit in. To the north is some more of the yard, as well as to the east. To the west is the weight area."
+roomArray[903] = "This is the weight lifting area of the yard, it is a mess. \nTo the north is a grassy portion of the yard, to the west is more yard."
+roomArray[902] = "This is the greenest area of the prison with a large chain fence. \nTo the south is the weights, and to the east is more courtyard."
 roomArray[102] = "You are standing in the corner of the dark prison cell. \nTo the east is a bed. To the south is a toilet."
 roomArray[103] = "You are now infront of your bed. The matress is made out of cardboard, and the pillow is a stuffed aligator. \nTo the west is another part of your cell. To the south is the cell door."
 roomArray[202] = "Here is your toilet, or rather your bucket. You have fond memories of using this against the gaurd. \nTo the north is the cell corner. To the east is the cell door."
