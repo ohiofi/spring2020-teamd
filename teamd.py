@@ -4,10 +4,27 @@ roomArray = []
 itemArray = []
 inventoryArray = []
 
+global quizCompleted
+quizCompleted = False
 global bossDead
 bossDead = False
 global passComplete
 passComplete = False
+
+def specialRooms(location):
+
+  if location == 803 and quizCompleted == False:
+        highLowMain()
+    else:
+        roomArray[803] = "hi"
+  if location == 502 and bossDead == False:
+        mainBoss()
+    else:
+        roomArray[502] = "The guard snores where he stands. South of you is a table. To the north is the exit. To the east is a wall."
+  if location == 506 and passComplete == False:
+        guessthepassword()
+    else:
+        roomArray[506] = "A calendar on the wall has some of the days crossed off, there is a poster for Top Gun. To the south is a mini fridge, to the west is the door to the mess hall."
 
 
 for i in range(999):
