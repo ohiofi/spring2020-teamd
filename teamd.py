@@ -207,6 +207,34 @@ def guessthepassword():
         else:
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nWrong password. Try again.")
 
+ def randomSecretWord ():
+    firstDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    secondDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    thirdDigit = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    combinedList = firstDigit + secondDigit + thirdDigit
+    randFirst = choice(combinedList)
+    randSecond = choice(combinedList)
+    randThird = choice(combinedList)
+    randCombo = randFirst + randSecond + randThird
+    return randCombo
+
+def highLowMain():
+    secretNumber = randomSecretWord()
+    secretNumber = str(secretNumber)
+    print("I'm thinking of a secret three number combination. Take a guess and I'll tell you if the secret number is before your number or after your number.")
+    while True:
+        print("Guess a word")
+        userInput = input()
+        userInput = str(userInput)
+        if userInput < secretNumber:
+            print("The secret word is after " + userInput)
+        if userInput > secretNumber:
+            print("The secret word is before " + userInput)
+        if userInput == secretNumber:
+            print("You got it!!!!!")
+            quizComplete = True
+            break           
+            
 def main():
     location = 102
     print("   ▄████████  ▄█        ▄██████▄     ▄████████  ▄█  ████████▄     ▄████████        ▄▄▄▄███▄▄▄▄      ▄████████ ███▄▄▄▄                             ")
