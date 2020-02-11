@@ -4,8 +4,10 @@ roomArray = []
 itemArray = []
 inventoryArray = []
 
-global bossDead = False
-global passComplete = False
+global bossDead
+bossDead = False
+global passComplete
+passComplete = False
 
 
 for i in range(999):
