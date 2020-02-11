@@ -3,6 +3,11 @@ from time import *
 roomArray = []
 itemArray = []
 inventoryArray = []
+
+global bossDead = False
+global passComplete = False
+
+
 for i in range(999):
     roomArray.append(False)
 for i in range(999):
@@ -81,14 +86,11 @@ def hitPlayer(playerHealth):
     return damage
 
 def whoWins(playerHealth, bossHealth):
-    global bossDead = False
     if bossHealth <= 0:
         print("Player Wins")
-        global bossDead = True
-        return bossDead
+        bossDead = True
     else:
         print("Boss Wins")
-        return bossDead
 
 def mainBoss():
   playerHealth = 50
@@ -167,8 +169,7 @@ def guessthepassword():
         if userinput == "jesusrocks":
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nYou're in!")
             print("The open page blares Never Gonna Give You Up by Rick Astley. A cat is playing piano on-screen. \nYou resist the urge to gag. What is this, 2008?")
-            global passComplete = True
-            return passComplete
+            passComplete = True
             break
         else:
             print("The computer blinks a loading symbol. You wait, sweat upon your brow. \nLoading... \nLoading... \nWrong password. Try again.")
